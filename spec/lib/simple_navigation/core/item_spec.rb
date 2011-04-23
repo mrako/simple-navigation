@@ -100,21 +100,6 @@ describe SimpleNavigation::Item do
         end
       end
     end
-
-    context ':select_with_submenu option' do
-      before(:each) do
-        @sub_navigation = stub(:sub_navigation)
-        @sub_navigation.stub!(:selected? => true)
-      end
-      it 'should unselect main item if submenu is selected' do
-        options = {:not_selected_with_submenu => true}
-        
-        @item = SimpleNavigation::Item.new(@item_container, :my_key, 'name', 'url', options)
-        @item.stub!(:sub_navigation => @sub_navigation)
-      
-        @item.should_not be_selected_by_subnav
-      end
-    end
     
     context 'url' do
       context 'url is a string' do
@@ -163,9 +148,10 @@ describe SimpleNavigation::Item do
       end
       context 'subnav is selected' do
         before(:each) do
+          @item.stub!(:selected_by_url? => false)
           @item.stub!(:selected_by_subnav? => true)
         end
-        it {@item.should be_selected}
+        it {@item.should_not be_selected}
       end
       context 'subnav is not selected' do
         before(:each) do
